@@ -8,9 +8,10 @@ module EntityLogger
 
     included do
       cattr_accessor :tags_for_logging
+      self.tags_for_logging = []
 
       def self.log(*attrs)
-        self.tags_for_logging ||= attrs
+        self.tags_for_logging = attrs
       end
     end
 
@@ -19,7 +20,12 @@ module EntityLogger
         tags = extract_tags(self.tags_for_logging)
 
         logger = EntityLogger.tagged_logger
-        logger.tagged(tags) { logger.send(level, msg) }
+
+        if tags
+          logger.tagged(tags) { logger.send(level, msg) }
+        else
+          logger.send(level, msg)
+        end
       end
     end
 
