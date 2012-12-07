@@ -17,27 +17,27 @@ Or install it yourself as:
     $ gem install entity_logger
 
 ## Usage
-
+```ruby
 require 'entity_logger'
 
 class Entity
-    include EntityLogger::Mixin
+  include EntityLogger::Mixin
 
-    log Logger.new(STDOUT), 'Prefix', :some_attr, or_lambda: { |e| e.some_attr + e.some_attr1 }
+  log Logger.new(STDOUT), 'Prefix', :some_attr, or_lambda: lambda { |e| e.some_attr + e.some_attr1 }
 
-    def some_attr
-      'Some attr'
-    end
+  def some_attr
+    'Some attr'
+  end
 
-    def some_attr1
-      1
-    end
+  def some_attr1
+    1
   end
 end
 
 entity = Entity.new
 entity.info 'Some log message'
 # Prefix [Some attr] [Some attr1] Some log message
+```
 
 ## Contributing
 
