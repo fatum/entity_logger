@@ -23,7 +23,7 @@ require 'entity_logger'
 class Entity
   include EntityLogger::Mixin
 
-  log Logger.new(STDOUT), 'Prefix', :some_attr, or_lambda: { |e| e.some_attr + e.some_attr1 }
+  log Logger.new(STDOUT), 'Prefix', :some_attr, or_lambda: lambda { |e| e.some_attr + e.some_attr1 }
 
   def some_attr
     'Some attr'
