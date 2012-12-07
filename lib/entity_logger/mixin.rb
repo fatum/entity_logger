@@ -1,8 +1,8 @@
 require 'active_support/concern'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/class/attribute'
 require 'active_support/deprecation'
-require 'logger'
 require 'entity_logger/tagged_logging'
 
 module EntityLogger
@@ -17,8 +17,7 @@ module EntityLogger
       end
 
     private
-      cattr_accessor :tags_for_logging, :logger_writer, :prefix
-      self.tags_for_logging = []
+      class_attribute :tags_for_logging, :logger_writer, :prefix
     end
 
     def log_with_tags(&block)
