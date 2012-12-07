@@ -10,9 +10,9 @@ module EntityLogger
     extend ActiveSupport::Concern
 
     included do
-      def self.log(logger, prefix, *attrs)
-        self.logger_writer = logger
-        self.prefix = prefix
+      def self.log(*attrs)
+        self.logger_writer = attrs.shift
+        self.prefix = attrs.shift
         self.tags_for_logging = attrs
       end
 
