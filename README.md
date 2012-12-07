@@ -18,7 +18,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+require 'entity_logger'
+
+class Entity
+    include EntityLogger::Mixin
+
+    log Logger.new(STDOUT), 'Prefix', :some_attr, or_lambda: { |e| e.some_attr + e.some_attr1 }
+
+    def some_attr
+      'Some attr'
+    end
+
+    def some_attr1
+      1
+    end
+  end
+end
+
+entity = Entity.new
+entity.info 'Some log message'
+# Prefix [Some attr] [Some attr1] Some log message
 
 ## Contributing
 

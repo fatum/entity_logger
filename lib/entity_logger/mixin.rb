@@ -3,18 +3,22 @@ require 'active_support/core_ext/class'
 require 'active_support/core_ext/object/blank'
 require 'active_support/deprecation'
 require 'logger'
+require 'entity_logger/tagged_logging'
 
 module EntityLogger
   module Mixin
     extend ActiveSupport::Concern
 
     included do
-      cattr_accessor :tags_for_logging
-      self.tags_for_logging = []
-
-      def self.log(*attrs)
+      def self.log(logger, prefix, *attrs)
+        self.logger_writer = logger
+        self.prefix = prefix
         self.tags_for_logging = attrs
       end
+
+    private
+      cattr_accessor :tags_for_logging, :logger_writer, :prefix
+      self.tags_for_logging = []
     end
 
     def log_with_tags(&block)
@@ -23,7 +27,7 @@ module EntityLogger
     end
 
     def logger
-      EntityLogger.tagged_logger
+      EntityLogger::TaggedLogging.new(self.logger_writer, self.prefix)
     end
 
     %w(info error debug).each do |level|

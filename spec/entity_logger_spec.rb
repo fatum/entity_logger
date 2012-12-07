@@ -4,13 +4,14 @@ describe EntityLogger do
   class EntityClass2
     include EntityLogger::Mixin
 
-    log :attr22
+    log Logger.new(STDOUT), 'Prefix', :attr22
   end
 
   class EntityClass
     include EntityLogger::Mixin
 
-    log :attr1, :attr1, :attr3 => lambda { |e| e.attr1 + e.attr2 }
+    log Logger.new(STDOUT), 'Prefix',
+    :attr1, :attr1, :attr3 => lambda { |e| e.attr1 + e.attr2 }
 
     def attr1
       'test1'

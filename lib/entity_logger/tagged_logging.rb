@@ -14,8 +14,8 @@ module EntityLogger
   # This is used by the default Rails.logger as configured by Railties to make it easy to stamp log lines
   # with subdomains, request ids, and anything else to aid debugging of multi-user production applications.
   class TaggedLogging
-    def initialize(logger)
-      @logger = logger
+    def initialize(logger, prefix)
+      @logger, @prefix = logger, prefix
     end
 
     def tagged(*tags)
@@ -46,7 +46,7 @@ module EntityLogger
 
     def add(severity, message = nil, progname = nil, &block)
       message = (block_given? ? block.call : progname) if message.nil?
-      @logger.add(severity, "#{tags_text}#{message}", progname)
+      @logger.add(severity, "#{@prefix} #{tags_text}#{message}", progname)
     end
 
     %w( fatal error warn info debug unknown ).each do |severity|
