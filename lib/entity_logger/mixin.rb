@@ -17,11 +17,18 @@ module EntityLogger
       end
     end
 
+    def log_with_tags(&block)
+      tags = extract_tags(self.tags_for_logging)
+      logger.tagged(tags) { yield } if tags
+    end
+
+    def logger
+      EntityLogger.tagged_logger
+    end
+
     %w(info error debug).each do |level|
       define_method(level) do |msg|
         tags = extract_tags(self.tags_for_logging)
-
-        logger = EntityLogger.tagged_logger
 
         if tags
           logger.tagged(tags) { logger.send(level, msg) }
