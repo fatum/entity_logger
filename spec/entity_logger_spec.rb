@@ -24,7 +24,7 @@ describe EntityLogger do
   %w(info debug error).each do |level|
     it "should receive logger method: #{level}" do
       obj = EntityClass.new
-      ActiveSupport::TaggedLogging.any_instance.should_receive(level.to_sym).with('Test')
+      EntityLogger::TaggedLogging.any_instance.should_receive(level.to_sym).with('Test')
       obj.send(level, 'Test')
     end
   end

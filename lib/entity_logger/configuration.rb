@@ -1,3 +1,5 @@
+require 'entity_logger/tagged_logging'
+
 module EntityLogger
   class << self
     attr_accessor :logger
@@ -8,8 +10,8 @@ module EntityLogger
   end
 
   def self.tagged_logger
-    self.logger ||= ActiveSupport::BufferedLogger.new(StringIO.new)
+    self.logger ||= ActiveSupport::BufferedLogger.new(STDOUT)
 
-    @@tagged_logger ||= ActiveSupport::TaggedLogging.new(self.logger)
+    @@tagged_logger ||= EntityLogger::TaggedLogging.new(self.logger)
   end
 end

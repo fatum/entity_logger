@@ -1,6 +1,8 @@
 require 'active_support/concern'
-require 'active_support/core_ext'
-require 'active_support/tagged_logging'
+require 'active_support/core_ext/class'
+require 'active_support/core_ext/object/blank'
+require 'active_support/deprecation'
+require 'logger'
 
 module EntityLogger
   module Mixin
