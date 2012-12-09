@@ -10,8 +10,7 @@ describe EntityLogger do
   class EntityClass
     include EntityLogger::Mixin
 
-    log Logger.new(STDOUT), 'Prefix',
-    :attr1, :attr1, :attr3 => lambda { |e| e.attr1 + e.attr2 }
+    log Logger.new(STDOUT), 'Prefix', :attr1 => lambda { |e| 'T' }, :attr2 => lambda { |e| 'D' }, :attr3 => lambda { |e| e.attr1 + e.attr2 }
 
     def attr1
       'test1'

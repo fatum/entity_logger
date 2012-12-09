@@ -46,11 +46,11 @@ module EntityLogger
       attrs.map do |attr|
         case attr
         when Hash
-          attr.values.first.call(self)
+          attr.values.map { |v| v.call(self) }
         else
           send(attr)
         end
-      end
+      end.flatten(1)
     end
   end
 end
