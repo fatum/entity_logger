@@ -45,7 +45,7 @@ module EntityLogger
 
   private
     def extract_tags(attrs)
-      attrs.map do |attr|
+      result = attrs.map do |attr|
         case attr
         when Hash
           attr.values.map { |v| v.call(self) }
@@ -53,6 +53,9 @@ module EntityLogger
           send(attr)
         end
       end.flatten(1)
+
+      result.unshift(self.prefix)
+      result
     end
   end
 end
