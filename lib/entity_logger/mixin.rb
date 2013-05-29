@@ -26,7 +26,13 @@ module EntityLogger
     end
 
     def logger
-      EntityLogger::TaggedLogging.new(self.logger_writer, self.prefix)
+      raise Exception 'Unexpected logger' unless self.logger_writer
+
+      if defined?(ActiveSupport::TaggedLogging)
+        ActiveSupport::TaggedLogging.new(self.logger_writer)
+      else
+        EntityLogger::TaggedLogging.new(self.logger_writer, self.prefix)
+      end
     end
 
     %w(info error debug).each do |level|
