@@ -1,4 +1,5 @@
 require 'active_support/concern'
+require 'active_support/tagged_logging'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/class/attribute'
@@ -27,12 +28,7 @@ module EntityLogger
 
     def logger
       raise Exception 'Unexpected logger' unless self.logger_writer
-
-      if defined?(ActiveSupport::TaggedLogging)
-        ActiveSupport::TaggedLogging.new(self.logger_writer)
-      else
-        EntityLogger::TaggedLogging.new(self.logger_writer, self.prefix)
-      end
+      ActiveSupport::TaggedLogging.new(self.logger_writer)
     end
 
     %w(info error debug).each do |level|
