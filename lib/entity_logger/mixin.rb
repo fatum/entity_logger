@@ -1,5 +1,4 @@
 require 'active_support/concern'
-require 'active_support/tagged_logging'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/class/attribute'
@@ -21,14 +20,9 @@ module EntityLogger
       class_attribute :tags_for_logging, :logger_writer, :prefix
     end
 
-    def log_with_tags(&block)
-      tags = extract_tags(self.tags_for_logging)
-      logger.tagged(tags) { yield } if tags
-    end
-
     def logger
       raise Exception 'Unexpected logger' unless self.logger_writer
-      ActiveSupport::TaggedLogging.new(self.logger_writer)
+      EntityLogger::TaggedLogging.new(self.logger_writer, self.prefix)
     end
 
     %w(info error debug).each do |level|
@@ -36,7 +30,7 @@ module EntityLogger
         tags = extract_tags(self.tags_for_logging)
 
         if tags
-          logger.tagged(tags) { logger.send(level, msg) }
+          logger.send(level, msg, tags)
         else
           logger.send(level, msg)
         end
@@ -45,7 +39,7 @@ module EntityLogger
 
   private
     def extract_tags(attrs)
-      result = attrs.map do |attr|
+      attrs.map do |attr|
         case attr
         when Hash
           attr.values.map { |v| v.call(self) }
@@ -53,9 +47,6 @@ module EntityLogger
           send(attr)
         end
       end.flatten(1)
-
-      result.unshift(self.prefix)
-      result
     end
   end
 end

@@ -21,17 +21,10 @@ describe EntityLogger do
     end
   end
 
-  describe "#log_with_tags" do
-    it 'should wrap inner log call with tags' do
-      obj = EntityClass.new
-      obj.log_with_tags { obj.logger.info('test') }.should be_true
-    end
-  end
-
   %w(info debug error).each do |level|
     it "should receive logger method: #{level}" do
       obj = EntityClass.new
-      ActiveSupport::TaggedLogging.any_instance.should_receive(level.to_sym).with('Test')
+      EntityLogger::TaggedLogging.any_instance.should_receive(level.to_sym).with('Test', ["T", "D", "test1test2"])
       obj.send(level, 'Test')
     end
   end
