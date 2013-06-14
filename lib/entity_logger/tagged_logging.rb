@@ -75,7 +75,7 @@ module EntityLogger
       end
 
       def current_tags
-        Thread.current[:activesupport_tagged_logging_tags] ||= []
+        Thread.current[:entitylogger_tagged_logging_tags] ||= []
       end
   end
 end
